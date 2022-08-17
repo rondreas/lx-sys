@@ -1,11 +1,25 @@
-# lxsdk bindings
+# lx-sys
 
-This crate is ffi bindings for Modo's LXSDK COM Interface. 
+Unsafe bindings for LX SDK from The Foundry, Modo.
 
-To build this yourself, download the LXSDK from The Foundry.
+## Building
 
-https://thefoundry.s3.amazonaws.com/products/modo/15.2v1/lxsdk_654077.zip
+Download the SDK from The Foundry, if you have a Foundry user visit their [Product Downloads](https://www.foundry.com/products/modo/download) and get the latest Modo Developer SDK.
 
-Copy the headers from LXSDK######/include/ => lxsdk/include/
+You will also need to install LLVM if you don't have this installed already as it is a [requirement](https://rust-lang.github.io/rust-bindgen/requirements.html) for bindgen
 
-To recreate the bindings.h I also added a python script to scan this folder and #include "{header}" for each header in the include folder as I didn't want to explore doing this in rust just yet.
+Set the environment variable `LX_INCLUDE` to the path where LXSDK has the headers. `.../lxsdk_{build_number}/include`
+
+You can create a .cargo folder at the root of the crate, then make a config.toml in there like
+
+``` toml
+[env]
+LX_INCLUDE = {value = "C:/Users/myname/Downloads/lxsdk_661446/include", relative = false }
+```
+
+The `build.rs` will attempt for search for all .h files and add them as `#include` to the `wrapper.h` at the root of cargo.
+
+## Useful Links
+
+https://rust-lang.github.io/rust-bindgen/introduction.html
+https://fitzgeraldnick.com/2016/12/14/using-libbindgen-in-build-rs.html
