@@ -19,9 +19,11 @@ fn main() {
     for include in includes {
         let dir_entry = include.unwrap();
         let path = dir_entry.path();
-        let filename = path.file_name().unwrap();
+        let filename = path.file_name().unwrap().to_str().expect("Failed to get path filename");
         if path.extension().unwrap() == "h" {
-            writeln!(header, "#include \"{}\"", filename.to_str().unwrap());
+            if let Err(e) = writeln!(header, "#include \"{}\"", filename) {
+                println!("macro writeln failed: {}", e.to_string());
+            }
         }
     }
 
